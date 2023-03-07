@@ -28,9 +28,12 @@
 
 import argparse
 import logging
+import shutil
 from argparse import ArgumentParser, HelpFormatter
+from datetime import datetime
 from operator import attrgetter
-from typing import Dict
+from pathlib import Path
+from typing import Dict, Optional
 
 import numpy as np
 
@@ -102,7 +105,7 @@ def get_parser():
     parser.add_argument(
         "--year",
         dest="submission_year",
-        default="2023",
+        default=datetime.now().strftime("%Y"),
         type=str,
         help="""
         Year of submission
@@ -148,6 +151,102 @@ def _show_params(params_dict: Dict):
     return
 
 
+class CreateCopyFile(object):
+    """
+    Class object for making a copy of the ``sample_problems.py`` script.
+    """
+
+    def __init__(self, **kwargs) -> None:
+        # Initializing parameters
+        self.__dict__.update(**kwargs)
+
+    def _show_params(self):
+        """
+        Function to show the defined of the class.
+        """
+        msg = "-" * 50 + "\n"
+        msg += "\t---- INPUT PARAMETERS ----" + "\n"
+        msg += "" + "\n"
+        # Keys to omit
+        columns_to_omit = []
+        # Sorting keys of dictionary
+        keys_sorted = np.sort(list(self.__dict__.keys()))
+        for key_ii in keys_sorted:
+            if key_ii not in columns_to_omit:
+                msg += f"\t>>> {key_ii} : {self.__dict__[key_ii]}\n"
+        #
+        msg += "\n" + "-" * 50 + "\n"
+        logger.info(msg)
+
+        return
+
+    def make_copy(self, fill_digits: Optional[str] = 4):
+        # sourcery skip: use-fstring-for-formatting
+        """
+        Function to create a copy of the ``sample_problems.py``.
+
+        Returns
+        ----------
+        filepath : str
+            Path to the copy of the sample Python script.
+        """
+        # Specifying file to copy
+        sample_filepath = (
+            Path(__file__).parent.joinpath("sample_problem.py").resolve()
+        )
+        # Checking that file exists
+        if not sample_filepath.exists():
+            self._check_file_exists(sample_filepath)
+        #
+        # --- Defining output filename
+        output_dirpath = (
+            Path(__file__)
+            .resolve()
+            .parents[1]
+            .joinpath(
+                "src",
+                f'year_{getattr(self, "submission_year")}',
+                f'company_{getattr(self, "company_name")}'.replace("-", "_")
+                .replace(" ", "_")
+                .lower(),
+                getattr(self, "problem_type")
+                .replace("-", "_")
+                .replace(" ", "_")
+                .lower(),
+            )
+        ).resolve()
+        output_dirpath.mkdir(parents=True, exist_ok=True)
+        if files_in_output_dir := np.sort(
+            list(output_dirpath.rglob("*.py"))
+        ).tolist():
+            # Getting the next index
+            last_idx = int(files_in_output_dir[-1].name.split("_")[0])
+            # Determining the new index
+            file_suffix = str(last_idx + 1).zfill(fill_digits)
+        else:
+            file_suffix = "0".zfill(fill_digits)
+        #
+        # --- New filename
+        output_filename = "{}_{}.py".format(
+            file_suffix,
+            getattr(self, "title").replace("-", "_").replace(" ", "_"),
+        )
+        output_filepath = output_dirpath.joinpath(output_filename)
+        #
+        # --- Copying file
+        shutil.copyfile(src=str(sample_filepath), dst=output_filepath)
+        # Check that file exists
+        if not output_filepath.exists():
+            self._check_file_exists(output_filepath)
+        #
+        logger.info(f"New file added: `{output_filepath}`")
+
+    def _check_file_exists(self, arg0):
+        msg = f">>> File `{str(arg0)}` does not exist!"
+        logger.error(msg)
+        raise FileNotFoundError(msg)
+
+
 # ------------------------------ MAIN FUNCTION --------------------------------
 
 
@@ -155,7 +254,10 @@ def main(params_dict: Dict):
     """
     Main function of the script.
     """
-    _show_params(params_dict=params_dict)
+    # Initializing class object
+    create_file_obj = CreateCopyFile(**params_dict)
+    create_file_obj._show_params()
+    create_file_obj.make_copy()
 
     return
 
