@@ -197,7 +197,7 @@ pre-commit-install:
 
 ## Uninstall the pre-commit Git hook
 pre-commit-uninstall:
-	@ pre-commit uninstall
+	@ pre-commit uninstall || echo ""
 
 ## Run the 'pre-commit' linting step manually
 lint:
