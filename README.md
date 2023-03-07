@@ -3,7 +3,7 @@
 This repository is designed for practicing coding problems during
 coding interviews.
 
-- [Instructions](#instructions)
+- [Instructions for local development](#instructions-for-local-development)
 
 ## Instructions for local development
 
@@ -27,6 +27,7 @@ delete-envrc              Delete the local envrc file of the project
 destroy                   Remove ALL of the artifacts + Python environments
 init                      Initialize the repository for code development
 lint                      Run the 'pre-commit' linting step manually
+new-problem               Function to create a file for a new coding problem
 pip-upgrade               Upgrade the version of the 'pip' package
 pre-commit-install        Installing the pre-commit Git hook
 pre-commit-uninstall      Uninstall the pre-commit Git hook
@@ -37,3 +38,21 @@ sort-requirements         Sort the project packages requirements file
 
 Each of these functions can be accessed through the `make` command at the
 base directory level.
+
+### Create new solution
+
+In order to create a file for the solution of a speciified coding exercise,
+one can run the following command:
+
+```bash
+make new-problem COMPANY_NAME="company" PROBLE_TYPE="type-of-problem" YEAR="2023" TITLE="name-of-problem"
+```
+, where:
+
+- `COMPANY_NAME` corresponds to the name of the company, to which one is applying;
+- `PROBLE_TYPE` corresponds to the type of coding problem ;
+- `YEAR` corresponds to the year of submission / application;
+- `TITLE` corresponds to the name of the script.
+
+This command will copy the sample script into the corresponding folder and
+have it named accordingly.
