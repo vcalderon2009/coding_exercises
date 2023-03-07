@@ -1,4 +1,4 @@
-# Job Coding Exercises
+# Coding Exercises
 
 This repository is designed for practicing coding problems during
 coding interviews.
