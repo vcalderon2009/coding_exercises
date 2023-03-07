@@ -1,6 +1,7 @@
 .PHONY: show-params init destroy clean clean-pyc clean-build clean-test
 	create-environment delete-environment pip-upgrade sort-requirements
-	requirements pre-commit-install pre-commit-uninstall lint help
+	requirements pre-commit-install pre-commit-uninstall lint
+	new-problem help
 
 ###############################################################################
 # GLOBALS                                                                     #
@@ -63,6 +64,14 @@ show-params:
 	@ printf "\n-------- PYTHON ---------------\n"
 	@ echo "HAS_CONDA:                         $(HAS_CONDA)"
 	@ echo "HAS_PYENV:                         $(HAS_PYENV)"
+	@ printf "\n-------- CODING PROBLEMS ---------------\n"
+	@ echo "ASSETS_DIR:                        $(ASSETS_DIR)"
+	@ echo "SAMPLE_FILENAME:                   $(SAMPLE_FILENAME)"
+	@ echo "SCRIPT_FILEPATH:                   $(SCRIPT_FILEPATH)"
+	@ echo "COMPANY_NAME:                      $(COMPANY_NAME)"
+	@ echo "PROBLE_TYPE:                       $(PROBLE_TYPE)"
+	@ echo "YEAR:                              $(YEAR)"
+	@ echo "TITLE:                             $(TITLE)"
 	@ printf "\n--------------------------------\n"
 
 ## Initialize the repository for code development
@@ -87,7 +96,6 @@ endif
 ## Remove ALL of the artifacts + Python environments
 destroy: clean pre-commit-uninstall delete-environment delete-envrc
 	@ echo ">>> Deleted all artifacts and environments!"
-
 
 ###############################################################################
 # MISCELLANEOUS COMMANDS                                                      #
@@ -194,6 +202,28 @@ pre-commit-uninstall:
 ## Run the 'pre-commit' linting step manually
 lint:
 	@ pre-commit run -a --hook-stage manual
+
+###############################################################################
+# CODING PROBLEMS                                                             #
+###############################################################################
+
+ASSETS_DIR = $(PROJECT_DIR)/assets
+SAMPLE_FILENAME = "sample_problem.py"
+SCRIPT_FILEPATH = "$(ASSETS_DIR)/create_challenge_file.py"
+
+# Variables to use when creating new directory
+COMPANY_NAME="general"
+PROBLE_TYPE="general"
+YEAR="2023"
+TITLE=""
+
+## Function to create a file for a new coding problem
+new-problem:
+	@	$(PYTHON_INTERPRETER) $(SCRIPT_FILEPATH) \
+		--company $(COMPANY_NAME) \
+		--problem-type $(PROBLE_TYPE) \
+		--year $(YEAR) \
+		--title $(TITLE)
 
 ###############################################################################
 # Self Documenting Commands                                                   #
