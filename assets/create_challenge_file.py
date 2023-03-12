@@ -181,7 +181,7 @@ class CreateCopyFile(object):
         return
 
     def make_copy(self, fill_digits: Optional[str] = 4):
-        # sourcery skip: use-fstring-for-formatting
+        # sourcery skip: use-fstring-for-formatting, use-named-expression
         """
         Function to create a copy of the ``sample_problems.py``.
 
@@ -216,9 +216,12 @@ class CreateCopyFile(object):
             )
         ).resolve()
         output_dirpath.mkdir(parents=True, exist_ok=True)
-        if files_in_output_dir := np.sort(
+        # Extracting files in directory
+        files_in_output_dir = np.sort(
             list(output_dirpath.rglob("*.py"))
-        ).tolist():
+        ).tolist()
+        # Checking if files exist
+        if files_in_output_dir:
             # Getting the next index
             last_idx = int(files_in_output_dir[-1].name.split("_")[0])
             # Determining the new index
