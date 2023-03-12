@@ -220,10 +220,10 @@ TITLE=""
 ## Function to create a file for a new coding problem
 new-problem:
 	@	$(PYTHON_INTERPRETER) $(SCRIPT_FILEPATH) \
-		--company $(COMPANY_NAME) \
-		--problem-type $(PROBLE_TYPE) \
+		--company "$(COMPANY_NAME)" \
+		--problem-type "$(PROBLE_TYPE)" \
 		--year $(YEAR) \
-		--title $(TITLE)
+		--title "$(TITLE)"
 
 ###############################################################################
 # Self Documenting Commands                                                   #
