@@ -34,15 +34,21 @@ logger.setLevel(logging.INFO)
 
 
 class Solution:
-    def test_function(self) -> None:
+    def validPalindrome(self, s: str) -> bool:
         """
-        FUNCTION DESCRIPTION
+        Given a string s, return true if the s can be palindrome after
+        deleting at most one character from it.
 
         Parameters
         --------------
+        s : str
+            String to check for the valid palindrome.
 
         Returns
         --------------
+        valid_option : bool
+            If ``True``, the string ``s`` is a valid palindrome, even
+            after deleting **at most** one character from it.
 
 
         Links
