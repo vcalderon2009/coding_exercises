@@ -57,10 +57,14 @@ class Solution:
 
         Parameters
         --------------
+        head : ListNode
+            Head of the linked list.
 
         Returns
         --------------
-
+        is_cycle : bool
+            If ``True``, there is a cycle in the linked list.
+            Otherwise, there is no cycle present.
 
         Links
         --------------
@@ -70,16 +74,43 @@ class Solution:
         Raises
         --------------
         """
+        # --- Edge cases
+        if head is None:
+            return False
 
-        return
+        # --- Defining slow and fast pointers
+        slow = head
+        fast = head.next
+
+        # Loop through the nodes
+        while slow != fast:
+            # Check that the current values are valud
+            if fast is None or fast.next is None:
+                return False
+
+            # Increasing pointers
+            slow = slow.next
+            fast = fast.next.next
+
+        return True
 
 
 if __name__ == "__main__":
     # Input parameters
-    head = [3, 2, 0, -4]
-    pos = 1
-    expected = True
+    head_values = [1, 2]
+    # head_values = [3, 2, 0, -4]
+    nodes_arr = [[]]
+    # Looping over values
+    for idx, val in enumerate(head_values[::-1]):
+        if idx == 0:
+            nodes_arr[0] = ListNode(val)
+        else:
+            node = ListNode(val)
+            node.next = nodes_arr[idx - 1]
+            nodes_arr.append(node)
+    # Specifying the head
+    head = nodes_arr[-1]
     # Instantiating object
-    a = Solution().test_function()
+    a = Solution().hasCycle(head=head)
     # Printing out solution
-    logger.info(f"a: {a}")
+    logger.info(f"\n\n>>> OUTPUT: {a}\n\n")
